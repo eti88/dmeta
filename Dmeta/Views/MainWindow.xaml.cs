@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Dmeta
+namespace Dmeta.Views
 {
     /// <summary>
     /// Logica di interazione per MainWindow.xaml
