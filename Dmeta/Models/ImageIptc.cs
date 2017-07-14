@@ -48,6 +48,34 @@ namespace Dmeta.Models
             }
         }
 
+        private string _pv;
+        public string Provence
+        {
+            get { return _pv; }
+            set
+            {
+                if (value != _pv)
+                {
+                    _pv = value;
+                    OnPropertyChanged("Provence");
+                }
+            }
+        }
+
+        private string _country;
+        public string Country
+        {
+            get { return _country; }
+            set
+            {
+                if (value != _country)
+                {
+                    _country = value;
+                    OnPropertyChanged("Country");
+                }
+            }
+        }
+
         private string _isocounrty;
         public string ISOCounrty
         {

@@ -64,7 +64,7 @@ namespace Dmeta.Models
         }
 
         private string _pv;
-        public string Province
+        public string Provence
         {
             get { return _pv; }
             set
@@ -72,7 +72,7 @@ namespace Dmeta.Models
                 if (value != _pv)
                 {
                     _pv = value;
-                    OnPropertyChanged("Province");
+                    OnPropertyChanged("Provence");
                 }
             }
         }
@@ -185,20 +185,6 @@ namespace Dmeta.Models
                 {
                     _keywords = value;
                     OnPropertyChanged("Keywords");
-                }
-            }
-        }
-
-        private string _subj;
-        public string IPTCSubject
-        {
-            get { return _subj; }
-            set
-            {
-                if (value != _subj)
-                {
-                    _subj = value;
-                    OnPropertyChanged("IPTCSubject");
                 }
             }
         }
