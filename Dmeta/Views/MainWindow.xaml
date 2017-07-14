@@ -6,11 +6,70 @@
         xmlns:local="clr-namespace:Dmeta.Views"
         xmlns:vm="clr-namespace:Dmeta.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Dmeta"
+        MinHeight="430" MinWidth="525"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}" SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <vm:ViewModelMain />
     </Window.DataContext>
-    <Grid>
-        
-    </Grid>
+    <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+        <DockPanel LastChildFill="True">
+            <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                            Mode="PrimaryMid" DockPanel.Dock="Top">
+                <DockPanel>
+                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False"
+                                        x:Name="MenuToggleButton" IsEnabled="False"/>
+                    <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
+                        <StackPanel>
+                            <Button x:Name="BtnOpenMetaJson" Content="Apri modello metadata" Click="BtnOpenMetaJson_Click"/>
+                        </StackPanel>
+                    </materialDesign:PopupBox>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Standard IPTC Metadata</TextBlock>
+                </DockPanel>
+            </materialDesign:ColorZone>
+            <materialDesign:DialogHost>
+            </materialDesign:DialogHost>
+            <materialDesign:Card DockPanel.Dock="Top" Padding="32" Margin="16" MinHeight="400">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="100" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="45" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="45" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <!-- Selezione files -->
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Seleziona percorso file TIFF" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="1" x:Name="TextBoxPath" Style="{DynamicResource MaterialDesignTextBox}" Margin="0,20,10,0"
+                             Text="{Binding SelectedPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <Button Grid.Column="1" Grid.Row="1" x:Name="BtnBrowseFolder" Content="Browse" VerticalAlignment="Bottom" Click="BtnBrowseFolder_Click"/>
+                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Seleziona file CSV" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                    <TextBox Grid.Row="3" x:Name="TextBoxCsv" Style="{DynamicResource MaterialDesignTextBox}" Margin="0,20,10,0"
+                             Text="{Binding SelectedFileCsv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="1" Grid.Row="3" x:Name="BtnBrowseFile" Content="Browse" VerticalAlignment="Bottom" Click="BtnBrowseFile_Click"/>
+                    <!-- Sezione di Avvio -->
+                    <StackPanel Margin="0,20,0,0" Orientation="Vertical" Grid.Row="4" Grid.ColumnSpan="2">
+                        <ProgressBar Orientation="Horizontal" Margin="24" 
+                                     Value="{Binding CurrentProgress, Mode=OneWay}" 
+                                     Maximum="{Binding MaxProgress, Mode=OneWay}" />
+                        <Button Content="Start" Width="100" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
+                                Command="{Binding StartCmd}" IsEnabled="{Binding IsStartEnabled}"/>
+                    </StackPanel>
+                    
+                </Grid>
+            </materialDesign:Card>
+        </DockPanel>
+    </materialDesign:DrawerHost>
+    
 </Window>

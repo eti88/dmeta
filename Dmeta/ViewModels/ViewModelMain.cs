@@ -1,26 +1,146 @@
-﻿using Dmeta.Models;
+﻿using Dmeta.Helpers;
+using Dmeta.Models;
+using Dmeta.Views.Usercontrols;
+using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace Dmeta.ViewModels
 {
     public class ViewModelMain : ViewModelBase
     {
+        private readonly BackgroundWorker worker;
+        
+        private string _selectedPath;
+        public string SelectedPath
+        {
+            get { return _selectedPath; }
+            set { _selectedPath = value; RaisePropertyChanged("SelectedPath"); }
+        }
+
+        private string _selectedFileCsv;
+        public string SelectedFileCsv
+        {
+            get { return _selectedFileCsv; }
+            set { _selectedFileCsv = value; RaisePropertyChanged("SelectedFileCsv"); }
+        }
+
+        private int currentProgress;
+        public int CurrentProgress
+        {
+            get { return this.currentProgress; }
+            private set
+            {
+                if (this.currentProgress != value)
+                {
+                    this.currentProgress = value;
+                    RaisePropertyChanged("CurrentProgress");
+                }
+            }
+        }
+
+        private int _max;
+        public int MaxProgress
+        {
+            get { return this._max; }
+            private set
+            {
+                if (this._max != value)
+                {
+                    this._max = value;
+                    RaisePropertyChanged("MaxProgress");
+                }
+            }
+        }
+
+        private bool _enabled;
+        public bool IsStartEnabled
+        {
+            get { return _enabled; }
+            private set
+            {
+                if (_enabled != value)
+                {
+                    _enabled = value;
+                    RaisePropertyChanged("IsStartEnabled");
+                }
+            }
+        }
+
+        private RelayCommand _start;
+        public RelayCommand StartCmd
+        {
+            get
+            {
+                if (_start == null)
+                {
+                    _start = new RelayCommand(param => this.Start());
+                }
+                return _start;
+            }
+        }
+
+
+        private void Start()
+        {
+            if (!worker.IsBusy)
+            {
+                IsStartEnabled = false;
+                worker.RunWorkerAsync();
+            }
+                
+        }
+
+        
+
         public ViewModelMain()
         {
+
+            this.worker = new BackgroundWorker();
+            this.worker.DoWork += this.DoWork;
+            this.worker.ProgressChanged += this.ProgressChanged;
+            this.worker.RunWorkerCompleted += this.DoWorkComplete;
+            this.worker.WorkerReportsProgress = true;
+            CurrentProgress = 0;
+            MaxProgress = 100;
+            IsStartEnabled = true;
             Metadata m = LoadBaseInfo(); // Carica le informazioni di base
 
             
         }
-
+       
         private Metadata LoadBaseInfo()
         {
             return Metadata.LoadModel(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "meta.json"));
         }
+
+        private void DoWork(object sender, DoWorkEventArgs e)
+        {
+            // do time-consuming work here, calling ReportProgress as and when you can
+            int x = 25 - 1;
+            MaxProgress = x;
+
+            for (int i=0; i < x; i++)
+            {
+                System.Threading.Thread.Sleep(200);
+                worker.ReportProgress(i);
+            }
+        }
+
+        private void ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            this.CurrentProgress = e.ProgressPercentage;
+        }
+
+        private void DoWorkComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
+            IsStartEnabled = true;
+            CurrentProgress = 0;
+
+        }
+
     }
 }
