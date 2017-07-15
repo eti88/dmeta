@@ -1,6 +1,6 @@
 ﻿using Dmeta.Helpers;
 using Dmeta.Models;
-using Dmeta.Views.Usercontrols;
+using Dmeta.Views;
 using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
 using System;
@@ -56,20 +56,6 @@ namespace Dmeta.ViewModels
             }
         }
 
-        private bool _enabled;
-        public bool IsStartEnabled
-        {
-            get { return _enabled; }
-            private set
-            {
-                if (_enabled != value)
-                {
-                    _enabled = value;
-                    RaisePropertyChanged("IsStartEnabled");
-                }
-            }
-        }
-
         private RelayCommand _start;
         public RelayCommand StartCmd
         {
@@ -77,21 +63,25 @@ namespace Dmeta.ViewModels
             {
                 if (_start == null)
                 {
-                    _start = new RelayCommand(param => this.Start());
+                    _start = new RelayCommand(param => this.Start(), param => this.CanStart);
                 }
                 return _start;
             }
         }
 
+        private bool CanStart
+        {
+            get { 
+                return (Directory.Exists(SelectedPath)) && (File.Exists(SelectedFileCsv)) && (!worker.IsBusy);
+            }
+        }
 
         private void Start()
         {
             if (!worker.IsBusy)
             {
-                IsStartEnabled = false;
                 worker.RunWorkerAsync();
-            }
-                
+            }              
         }
 
         
@@ -106,7 +96,7 @@ namespace Dmeta.ViewModels
             this.worker.WorkerReportsProgress = true;
             CurrentProgress = 0;
             MaxProgress = 100;
-            IsStartEnabled = true;
+
             Metadata m = LoadBaseInfo(); // Carica le informazioni di base
 
             
@@ -137,9 +127,9 @@ namespace Dmeta.ViewModels
 
         private void DoWorkComplete(object sender, RunWorkerCompletedEventArgs e)
         {
-            IsStartEnabled = true;
             CurrentProgress = 0;
-
+            var completeWin = new SummaryWindow();
+            completeWin.ShowDialog();
         }
 
     }

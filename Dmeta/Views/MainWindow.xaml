@@ -64,7 +64,7 @@
                                      Value="{Binding CurrentProgress, Mode=OneWay}" 
                                      Maximum="{Binding MaxProgress, Mode=OneWay}" />
                         <Button Content="Start" Width="100" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
-                                Command="{Binding StartCmd}" IsEnabled="{Binding IsStartEnabled}"/>
+                                Command="{Binding StartCmd}"/>
                     </StackPanel>
                     
                 </Grid>

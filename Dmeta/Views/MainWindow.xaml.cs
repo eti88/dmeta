@@ -16,8 +16,6 @@ namespace Dmeta.Views
         public MainWindow()
         {
             InitializeComponent();
-
-
         }
 
         private void BtnOpenMetaJson_Click(object sender, RoutedEventArgs e)
@@ -47,8 +45,7 @@ namespace Dmeta.Views
         {
             using(var dialog = new OpenFileDialog())
             {
-                dialog.InitialDirectory = Environment.SpecialFolder.Desktop.ToString();
-                Console.WriteLine("Root Folder: " + dialog.InitialDirectory);
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     TextBoxCsv.Text = dialog.FileName;
