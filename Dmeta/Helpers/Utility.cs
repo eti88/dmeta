@@ -30,10 +30,5 @@ namespace Dmeta.Helpers
             }
         }
 
-        /*
-         TODO:
-          creare funzione di generazione di date progressive
-          un tot ogni giorno
-         */
     }
 }

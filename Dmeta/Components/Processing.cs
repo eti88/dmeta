@@ -87,6 +87,10 @@ namespace Dmeta.Components
             // Calcolo la proporzione di incremento
             for (int i = 0; i < infos.Count; i++)
             {
+                // i % j = data + 1
+                // La data di partenza + da inserie nel modello (add)
+                // inserire nel modello il valore j cioè ogni quanti documenti incrementare la data (add)
+
                 try
                 {
                     var merged = new ItcpMeta
