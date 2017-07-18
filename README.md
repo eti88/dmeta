@@ -13,3 +13,7 @@ parametro a exiftool per inserire i metadati.
 
 
 \* *dovrete modificare la classe di riferimento in base alle vostre esigenze*
+
+## Screenshot
+
+![Screenshot](screenshot.jpg)
