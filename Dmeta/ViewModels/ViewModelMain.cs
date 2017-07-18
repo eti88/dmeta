@@ -1,12 +1,22 @@
-﻿using Dmeta.Helpers;
+﻿using CsvHelper;
+using Dmeta.Components;
+using Dmeta.Helpers;
+using Dmeta.Map;
 using Dmeta.Models;
 using Dmeta.Views;
 using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media.Imaging;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Dmeta.ViewModels
 {
@@ -40,6 +50,13 @@ namespace Dmeta.ViewModels
                     RaisePropertyChanged("CurrentProgress");
                 }
             }
+        }
+
+        private string _statusMessage;
+        public string StatusMessage
+        {
+            get { return _statusMessage; }
+            set { _statusMessage = value; RaisePropertyChanged("StatusMessage"); }
         }
 
         private int _max;
@@ -84,7 +101,6 @@ namespace Dmeta.ViewModels
             }              
         }
 
-        
 
         public ViewModelMain()
         {
@@ -96,28 +112,28 @@ namespace Dmeta.ViewModels
             this.worker.WorkerReportsProgress = true;
             CurrentProgress = 0;
             MaxProgress = 100;
-
-            Metadata m = LoadBaseInfo(); // Carica le informazioni di base
-
-            
+            StatusMessage = string.Empty;
         }
-       
-        private Metadata LoadBaseInfo()
-        {
-            return Metadata.LoadModel(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "meta.json"));
-        }
+
+        // Background worker behaviour
 
         private void DoWork(object sender, DoWorkEventArgs e)
         {
-            // do time-consuming work here, calling ReportProgress as and when you can
-            int x = 25 - 1;
-            MaxProgress = x;
-
-            for (int i=0; i < x; i++)
+            MaxProgress = CalcProgress("path_to_csv_file");
+            //List<int> phases = Utility.DistributeInteger(MaxProgress, 2).ToList();
+            string[] images = System.IO.Directory.GetFiles("output_dir", "*.tif", System.IO.SearchOption.AllDirectories);
+            Processing proc = new Processing();
+            
+            StatusMessage = "Generazione file metadata.json ...";
+            if (!proc.JsonGeneartion(worker, "path_to_csv_file", "output_dir", ref images))
             {
-                System.Threading.Thread.Sleep(200);
-                worker.ReportProgress(i);
+                Console.WriteLine("Generazione file metadata.json fallita");
+                worker.CancelAsync();
             }
+
+            StatusMessage = "Aggiunta metadati alle immagini...";
+            proc.InjectMetadata("output_dir");
+
         }
 
         private void ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -130,7 +146,12 @@ namespace Dmeta.ViewModels
             CurrentProgress = 0;
             var completeWin = new SummaryWindow();
             completeWin.ShowDialog();
+            StatusMessage = string.Empty;
         }
 
+        private int CalcProgress(string pathcsv)
+        {
+            return (File.Exists(pathcsv) && !string.IsNullOrEmpty(pathcsv)) ? File.ReadLines(pathcsv).Count() : 0;
+        }
     }
 }

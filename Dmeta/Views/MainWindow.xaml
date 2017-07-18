@@ -63,6 +63,9 @@
                         <ProgressBar Orientation="Horizontal" Margin="24" 
                                      Value="{Binding CurrentProgress, Mode=OneWay}" 
                                      Maximum="{Binding MaxProgress, Mode=OneWay}" />
+
+                        <TextBlock Text="{Binding StatusMessage, Mode=OneWay}" TextAlignment="Center" Margin="10,0,10,10"/>
+
                         <Button Content="Start" Width="100" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
                                 Command="{Binding StartCmd}"/>
                     </StackPanel>

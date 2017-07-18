@@ -12,22 +12,8 @@ namespace Dmeta.Models
     {
         #region Property
 
-        private int _id;
-        public int Id
-        {
-            get { return _id; }
-            set
-            {
-                if (value != _id)
-                {
-                    _id = value;
-                    OnPropertyChanged("Id");
-                }
-            }
-        }
-
-        private Uri _image;
-        public Uri UriImage
+        private string _image;
+        public string UriImage
         {
             get { return _image; }
             set
