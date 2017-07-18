@@ -1,22 +1,10 @@
-﻿using CsvHelper;
-using Dmeta.Components;
+﻿using Dmeta.Components;
 using Dmeta.Helpers;
-using Dmeta.Map;
-using Dmeta.Models;
 using Dmeta.Views;
-using MaterialDesignThemes.Wpf;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media.Imaging;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Dmeta.ViewModels
 {
@@ -119,20 +107,19 @@ namespace Dmeta.ViewModels
 
         private void DoWork(object sender, DoWorkEventArgs e)
         {
-            MaxProgress = CalcProgress("path_to_csv_file");
-            //List<int> phases = Utility.DistributeInteger(MaxProgress, 2).ToList();
-            string[] images = System.IO.Directory.GetFiles("output_dir", "*.tif", System.IO.SearchOption.AllDirectories);
+            MaxProgress = CalcProgress(SelectedFileCsv);
+            string[] images = System.IO.Directory.GetFiles(SelectedPath, "*.tif", System.IO.SearchOption.AllDirectories);
             Processing proc = new Processing();
             
             StatusMessage = "Generazione file metadata.json ...";
-            if (!proc.JsonGeneartion(worker, "path_to_csv_file", "output_dir", ref images))
+            if (!proc.JsonGeneartion(worker, SelectedFileCsv, SelectedPath, ref images))
             {
                 Console.WriteLine("Generazione file metadata.json fallita");
                 worker.CancelAsync();
             }
 
             StatusMessage = "Aggiunta metadati alle immagini...";
-            proc.InjectMetadata("output_dir");
+            proc.InjectMetadata(SelectedPath);
 
         }
 
