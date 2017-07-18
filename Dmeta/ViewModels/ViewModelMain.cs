@@ -1,6 +1,7 @@
 ﻿using Dmeta.Components;
 using Dmeta.Helpers;
 using Dmeta.Views;
+using NLog;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -89,6 +90,7 @@ namespace Dmeta.ViewModels
             }              
         }
 
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public ViewModelMain()
         {
@@ -114,7 +116,7 @@ namespace Dmeta.ViewModels
             StatusMessage = "Generazione file metadata.json ...";
             if (!proc.JsonGeneartion(worker, SelectedFileCsv, SelectedPath, ref images))
             {
-                Console.WriteLine("Generazione file metadata.json fallita");
+                logger.Error("Generazione file metadata.json fallita");
                 worker.CancelAsync();
             }
 

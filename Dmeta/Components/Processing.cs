@@ -2,6 +2,7 @@
 using Dmeta.Map;
 using Dmeta.Models;
 using Newtonsoft.Json;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,10 +18,13 @@ namespace Dmeta.Components
         private const string EXE = @"exiftool(-k).exe";
         private const string JSONNAME = "metadata.json";
 
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public Processing()
         {
             if (!File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, EXE)))
             {
+                logger.Error(string.Format("{0} non trovato, vedi Readme github", EXE));
                 throw new FileNotFoundException("exiftool exe not found!");
             }
         }
@@ -46,7 +50,7 @@ namespace Dmeta.Components
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                logger.Error(e);
             }
         }
 
@@ -128,7 +132,11 @@ namespace Dmeta.Components
                     };
 
                     if (merged == null)
+                    {
+                        logger.Error(infos[i].Image + " created object null");
                         throw new Exception(infos[i].Image + " created object null");
+                    }
+                        
 
                     metaImages.Add(merged);
                     if(backgroundWorker != null)
@@ -136,7 +144,7 @@ namespace Dmeta.Components
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    logger.Error(e);
                 }
             }
 
