@@ -3,6 +3,7 @@
 
 # json base file information
 meta.json
+exiftool.exe
 
 # User-specific files
 *.suo

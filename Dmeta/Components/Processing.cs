@@ -20,17 +20,20 @@ namespace Dmeta.Components
 
         public Processing()
         {
-
+            if (!File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, EXE)))
+            {
+                throw new FileNotFoundException("exiftool exe not found!");
+            }
         }
 
-        public void InjectMetadata(string outputdir)
+        public void InjectMetadata(string outputdir, string filename = JSONNAME)
         {
             try
             {
                 ProcessStartInfo processinfo = new ProcessStartInfo();
                 processinfo.FileName = EXE;
-                processinfo.Arguments = @"-json='test2.json' -overwrite_original " + outputdir;
-                processinfo.RedirectStandardOutput = true;
+                processinfo.Arguments = string.Format("-json={0} -overwrite_original \"{1}\"", filename, outputdir);
+                processinfo.RedirectStandardOutput = false;
                 processinfo.UseShellExecute = true;
                 processinfo.CreateNoWindow = false;
 
@@ -121,8 +124,8 @@ namespace Dmeta.Components
                         throw new Exception(infos[i].Image + " created object null");
 
                     metaImages.Add(merged);
-                    backgroundWorker.ReportProgress(i);
-
+                    if(backgroundWorker != null)
+                        backgroundWorker.ReportProgress(i);
                 }
                 catch (Exception e)
                 {
@@ -134,7 +137,7 @@ namespace Dmeta.Components
             {
                 return false;
             }
-            File.WriteAllText(JsonConvert.SerializeObject(metaImages), Path.Combine(pathoutput, JSONNAME));
+            File.WriteAllText(Path.Combine(pathoutput, JSONNAME), JsonConvert.SerializeObject(metaImages));
             return true;
         }
 

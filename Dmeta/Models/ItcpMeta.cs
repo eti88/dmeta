@@ -74,5 +74,7 @@ namespace Dmeta.Models
 
         [JsonProperty("CodedCharacterSet")]
         public string CodedCharacterSet { get { return "UTF8"; } }
+
+
     }
 }
