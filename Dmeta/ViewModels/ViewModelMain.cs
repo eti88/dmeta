@@ -3,6 +3,7 @@ using Dmeta.Helpers;
 using Dmeta.Views;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -110,7 +111,7 @@ namespace Dmeta.ViewModels
         private void DoWork(object sender, DoWorkEventArgs e)
         {
             MaxProgress = CalcProgress(SelectedFileCsv);
-            string[] images = System.IO.Directory.GetFiles(SelectedPath, "*.tif", System.IO.SearchOption.AllDirectories);
+            List<string> images = System.IO.Directory.GetFiles(SelectedPath, "*.tif", System.IO.SearchOption.AllDirectories).ToList();
             Processing proc = new Processing();
             
             StatusMessage = "Generazione file metadata.json ...";

@@ -60,7 +60,7 @@ namespace Dmeta.Components
         /// <param name="backgroundWorker"></param>
         /// <param name="pathcsv"></param>
         /// <param name="pathoutput"></param>
-        public bool JsonGeneartion(BackgroundWorker backgroundWorker, string pathcsv, string pathoutput, ref string[] images)
+        public bool JsonGeneartion(BackgroundWorker backgroundWorker, string pathcsv, string pathoutput, ref List<string> images)
         {
             List<ItcpMeta> metaImages = new List<ItcpMeta>();
             List<Information> infos = new List<Information>();
@@ -85,17 +85,18 @@ namespace Dmeta.Components
             }
 
             // Associare path immagini ai records
-            //for(int x=0; x < images.Length; x++)
-            //{
-            //    infos[x].PathImage = Array.BinarySearch<string>(images, infos[x].Image);
-            //}
-
-            // usare images
-            // Probabilmente da modificare il metodo di
-            // creazione path per le immagini
-            // bisogna poi scansionare le subdir
-            // e associarli ai record
-            // path relativi !!!!
+            for (int x = 0; x < infos.Count; x++)
+            {
+                for(int z = 0; z < images.Count; z++)
+                {
+                    if (Path.GetFileNameWithoutExtension(infos[x].Image).Equals(Path.GetFileNameWithoutExtension(images[z])))
+                    {
+                        infos[x].PathImage = images[z];
+                        images.RemoveAt(z);
+                        break;
+                    }
+                }
+            }
 
             // Calcolo la proporzione di incremento
             for (int i = 0; i < infos.Count; i++)
@@ -160,5 +161,7 @@ namespace Dmeta.Components
         {
             return Metadata.LoadModel(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "meta.json"));
         }
+
+        
     }
 }
