@@ -52,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="exif.bat" />
     <None Include="input.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

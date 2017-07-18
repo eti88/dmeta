@@ -11,6 +11,7 @@ namespace Dmeta.Models
     /// </summary>
     public class Information
     {
+        public string PathImage { get; set; }
         public string Image { get; set; }
         public string Location { get; set; }
         public string City { get; set; }

@@ -8,12 +8,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Dmeta.Components
 {
     public class Processing
     {
-        private const string EXE = "exiftool(-k).exe";
+        private const string EXE = @"exiftool(-k).exe";
         private const string JSONNAME = "metadata.json";
 
         public Processing()
@@ -29,11 +30,12 @@ namespace Dmeta.Components
             try
             {
                 ProcessStartInfo processinfo = new ProcessStartInfo();
-                processinfo.FileName = EXE;
-                processinfo.Arguments = string.Format("-json={0} -overwrite_original \"{1}\"", filename, outputdir);
+                processinfo.FileName = "exif.bat";
+                processinfo.Arguments = string.Format("-charset UTF8 -json={0} -overwrite_original \"{1}\"", filename, outputdir);
                 processinfo.RedirectStandardOutput = false;
                 processinfo.UseShellExecute = true;
                 processinfo.CreateNoWindow = false;
+                
 
                 using (Process p = new Process())
                 {
@@ -49,8 +51,7 @@ namespace Dmeta.Components
         }
 
         /// <summary>
-        /// Genera il file Json Contenente le informazioni per i metatag relativi ad ogni file
-        /// riportando una parcentuale approssimativa di 1/3 del processo totale
+        /// Genera il file Json Contenente le informazioni per i metadati relativi ad ogni file
         /// </summary>
         /// <param name="backgroundWorker"></param>
         /// <param name="pathcsv"></param>
@@ -78,6 +79,13 @@ namespace Dmeta.Components
                 Console.WriteLine("Caricamento csv fallito");
                 return false;
             }
+
+            // Associare path immagini ai records
+            //for(int x=0; x < images.Length; x++)
+            //{
+            //    infos[x].PathImage = Array.BinarySearch<string>(images, infos[x].Image);
+            //}
+
             // usare images
             // Probabilmente da modificare il metodo di
             // creazione path per le immagini
@@ -91,12 +99,13 @@ namespace Dmeta.Components
                 // i % j = data + 1
                 // La data di partenza + da inserie nel modello (add)
                 // inserire nel modello il valore j cioè ogni quanti documenti incrementare la data (add)
+                
 
                 try
                 {
                     var merged = new ItcpMeta
                     {
-                        SourceFile = infos[i].Image,
+                        SourceFile = infos[i].PathImage,
                         Creator = m.ContactData.Creator,
                         AuthorsPosition = m.ContactData.JobTitle,
                         Headline = m.ContactData.Title,
