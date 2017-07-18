@@ -4,7 +4,7 @@ Aggiunge i metadati secondo lo standard IPTC alle immagini TIFF utilizzando exif
 ## Requisiti
 
 * Scaricare [exiftool](https://www.sno.phy.queensu.ca) e copiarlo nella directory di output
-* Creare il file **meta.jsonéé basato sulla classe **Models.Metadata**
+* Creare il file **meta.json** basato sulla classe **Models.Metadata**
 
 ## Funzionamento
 Passando in input un file csv\* e una directory contentente immagini TIFF il
