@@ -99,12 +99,23 @@ namespace Dmeta.Components
             }
 
             // Calcolo la proporzione di incremento
+            int dayscan = 1500;
+            DateTime date = new DateTime(2017, 06, 30);
+
             for (int i = 0; i < infos.Count; i++)
             {
                 // i % j = data + 1
                 // La data di partenza + da inserie nel modello (add)
                 // inserire nel modello il valore j cioè ogni quanti documenti incrementare la data (add)
-                
+                if (i % dayscan == 0)
+                {
+                    date.AddDays(1);
+                    if (date.DayOfWeek == DayOfWeek.Saturday)
+                        date.AddDays(2);
+                    else if (date.DayOfWeek == DayOfWeek.Sunday)
+                        date.AddDays(1);
+                }
+                    
 
                 try
                 {

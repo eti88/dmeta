@@ -29,7 +29,7 @@ namespace Test
         {
             Processing p = new Processing();
 
-            string[] imgs = System.IO.Directory.GetFiles(System.AppDomain.CurrentDomain.BaseDirectory, "*.tif", System.IO.SearchOption.AllDirectories);
+            List<string> imgs = System.IO.Directory.GetFiles(System.AppDomain.CurrentDomain.BaseDirectory, "*.tif", System.IO.SearchOption.AllDirectories).ToList();
 
             Assert.IsNotNull(imgs);
             Assert.IsTrue(imgs.Count() > 0);

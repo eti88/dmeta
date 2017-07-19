@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -68,6 +69,11 @@ namespace Dmeta.Models
             }
         }
 
+        public DateTime StartScanDate { get; set; }
+
+        public int ScanDay { get; set; }
+
+
         #endregion
 
         public Metadata() {
@@ -85,13 +91,13 @@ namespace Dmeta.Models
                 using (StreamReader sr = new StreamReader(uri))
                 {
                     string json = sr.ReadToEnd();
-                    m = JsonConvert.DeserializeObject<Metadata>(json);
+                    m = JsonConvert.DeserializeObject<Metadata>(json, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
                 }
                 return m;
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
             }
             return null;
         }
