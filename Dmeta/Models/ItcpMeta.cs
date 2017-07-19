@@ -75,6 +75,13 @@ namespace Dmeta.Models
         [JsonProperty("CodedCharacterSet")]
         public string CodedCharacterSet { get { return "UTF8"; } }
 
+        [JsonProperty("FileCreateDate")]
+        public string FileCreateDate { get { return DateCreated + " 00:00:00+00:00"; } }
 
+        [JsonProperty("CreateDate")]
+        public string CreateDate { get { return DateCreated + " 00:00:00+00:00"; } }
+
+        [JsonProperty("MetadataDate")]
+        public string MetadataDate { get { return DateCreated + " 00:00:00+00:00"; } }
     }
 }

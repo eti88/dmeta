@@ -125,7 +125,7 @@ namespace Dmeta.Components
                         ImageDescription = m.ContactData.Description,
                         Keywords = m.ContactData.Keywords,
                         DescriptionWriter = m.ContactData.Creator,
-                        DateCreated = m.ImageData.CreatedAt.ToString("dd/MM/yyyy"),
+                        DateCreated = date.ToString("yyyy:MM:dd"),
                         Location = infos[i].Location,
                         City = infos[i].City,
                         State = m.ImageData.City,
